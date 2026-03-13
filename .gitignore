@@ -1,0 +1,36 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+release/
+
+# Runtime output
+output/
+
+# Temp/intermediate files
+*.raw
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+Desktop.ini
+nul
+
+# IDE / Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Tool-specific
+.opencode/
+
+# Test audio samples (generated locally via generate-test-audio.ps1)
+input/
+
+# Environment
+.env
+.env.*

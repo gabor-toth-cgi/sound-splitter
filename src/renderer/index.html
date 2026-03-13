@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; connect-src 'self' file: blob:; media-src 'self' file: blob:; img-src 'self' data:;" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sound Splitter</title>
+  <link rel="stylesheet" href="styles/main.css" />
+</head>
+<body>
+  <!-- ===== FILE PICKER ===== -->
+  <section id="file-picker" class="panel file-picker-panel">
+    <button id="btn-choose-file" class="btn btn-primary">Choose File</button>
+    <span id="file-name" class="file-name">No file selected</span>
+  </section>
+
+  <!-- ===== WAVEFORM ===== -->
+  <section id="waveform-container" class="panel waveform-panel">
+    <div id="waveform"></div>
+    <div id="waveform-time" class="waveform-time">
+      <span id="time-current">0:00</span> / <span id="time-total">0:00</span>
+    </div>
+  </section>
+
+  <!-- ===== MEDIA CONTROLS ===== -->
+  <section id="media-controls" class="panel controls-panel">
+    <div class="controls-left">
+      <button id="btn-play" class="btn btn-icon" disabled title="Play">&#9654;</button>
+      <button id="btn-pause" class="btn btn-icon" disabled title="Pause">&#9646;&#9646;</button>
+      <button id="btn-stop" class="btn btn-icon" disabled title="Stop">&#9632;</button>
+      <input  id="seek-slider" type="range" min="0" max="100" value="0" step="0.1" class="slider seek-slider" disabled />
+    </div>
+    <div class="controls-right">
+      <button id="btn-mute" class="btn btn-icon-sm" title="Mute">&#128266;</button>
+      <input  id="volume-slider" type="range" min="0" max="100" value="80" class="slider volume-slider" />
+    </div>
+  </section>
+
+  <!-- ===== PROCESSING CONTROLS ===== -->
+  <section id="processing-controls" class="panel processing-panel">
+    <div class="proc-buttons">
+      <button id="btn-start-proc" class="btn btn-accent" disabled>Start Processing</button>
+      <button id="btn-pause-proc" class="btn" disabled>Pause</button>
+      <button id="btn-stop-proc"  class="btn btn-danger" disabled>Stop</button>
+      <span id="proc-status" class="proc-status">Idle</span>
+    </div>
+    <div class="sensitivity-row">
+      <label for="sensitivity-slider" class="sensitivity-label">Sensitivity:</label>
+      <input id="sensitivity-slider" type="range" min="1" max="10" value="5" step="1" class="slider sensitivity-slider" />
+      <span id="sensitivity-value" class="sensitivity-value">5</span>
+      <span id="sensitivity-desc" class="sensitivity-desc">Balanced</span>
+    </div>
+    <div class="language-row">
+      <label for="language-select" class="language-label">Language:</label>
+      <select id="language-select" class="language-select">
+        <option value="auto" selected>Auto-detect</option>
+        <option value="en">English</option>
+        <option value="hu">Hungarian</option>
+      </select>
+    </div>
+  </section>
+
+  <!-- ===== RESULTS ===== -->
+  <section id="results-panel" class="panel results-panel">
+    <h3 class="section-title">Results</h3>
+    <div id="results-list" class="results-list">
+      <p class="results-empty">No results yet. Load a file and start processing.</p>
+    </div>
+  </section>
+
+  <!-- ===== CONSOLE LOG ===== -->
+  <section id="console-panel" class="panel console-panel">
+    <div id="console-header" class="console-header">
+      <span class="console-title">&#9660; Console Log</span>
+      <button id="btn-clear-log" class="btn btn-sm">Clear</button>
+    </div>
+    <div id="console-body" class="console-body">
+      <div id="console-log" class="console-log"></div>
+    </div>
+  </section>
+
+  <!-- Renderer entry point (bundled) -->
+  <script src="../../dist/renderer/app.bundle.js"></script>
+</body>
+</html>
