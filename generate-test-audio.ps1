@@ -1,6 +1,10 @@
 Add-Type -AssemblyName System.Speech
 
-$baseDir = "C:\Projects\training\agentic\sound-splitter\input"
+# Resolve input directory relative to this script's location
+$baseDir = Join-Path $PSScriptRoot "input"
+if (-not (Test-Path $baseDir)) {
+    New-Item -ItemType Directory -Path $baseDir | Out-Null
+}
 
 # =====================================================
 # Sample 1: Two-speaker conversation with pauses
@@ -281,5 +285,35 @@ $synth.SetOutputToWaveFile("$baseDir\sample5-noisy-meeting.wav")
 $synth.Speak($builder)
 $synth.Dispose()
 Write-Output "  Done: sample5-noisy-meeting.wav"
+
+# =====================================================
+# Convert WAV files to MP3 using ffmpeg
+# =====================================================
+Write-Output "`nConverting WAV to MP3..."
+
+# Try to find ffmpeg: bundled via ffmpeg-static, or system PATH
+$ffmpeg = $null
+$ffmpegStatic = Join-Path $PSScriptRoot "node_modules\ffmpeg-static\ffmpeg.exe"
+if (Test-Path $ffmpegStatic) {
+    $ffmpeg = $ffmpegStatic
+} elseif (Get-Command ffmpeg -ErrorAction SilentlyContinue) {
+    $ffmpeg = "ffmpeg"
+}
+
+if ($ffmpeg) {
+    $wavFiles = Get-ChildItem -Path $baseDir -Filter "sample*.wav"
+    foreach ($wav in $wavFiles) {
+        $mp3 = $wav.FullName -replace '\.wav$', '.mp3'
+        & $ffmpeg -y -i $wav.FullName -codec:a libmp3lame -qscale:a 2 $mp3 2>&1 | Out-Null
+        if ($LASTEXITCODE -eq 0) {
+            Write-Output "  Converted: $($wav.Name) -> $($wav.BaseName).mp3"
+        } else {
+            Write-Output "  WARNING: Failed to convert $($wav.Name)"
+        }
+    }
+} else {
+    Write-Output "  WARNING: ffmpeg not found. WAV files generated but MP3 conversion skipped."
+    Write-Output "  Install ffmpeg or run 'npm install' first (ffmpeg-static provides it)."
+}
 
 Write-Output "`nAll 5 samples generated successfully!"
